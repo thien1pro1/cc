@@ -18,6 +18,8 @@ public class CriteriaService {
     @Autowired
     ScoreRepository scoreRepository;
 
+
+
     public int getMinLevel(){
         int level = -6;
         List<Criteria> list = criteriaRepository.findAll();
@@ -28,11 +30,32 @@ public class CriteriaService {
         }
         return level;
     }
+    public List<Criteria> getAllDetail(){
+        List<Criteria> detailList= criteriaRepository.searchCriteriaByLevelContains(getMinLevel());
+        return detailList;
+    }
 
-    public List<Criteria> findAllRootCriteria(Long id){
-        List<Criteria> allRoot = criteriaRepository.searchCriteriaByParentContains(id);
+    public void saveAllCriteria(List<Integer> scoreList, School school){
+        List<Criteria> detailList = criteriaRepository.searchCriteriaByLevelContains(getMinLevel());
+        if(scoreList.size()==detailList.size()){
+            for(int i = 0; i<= scoreList.size();i++){
+                Score newScore = new Score();
+                newScore.setScore(scoreList.get(i));
+                newScore.setCriteria(detailList.get(i));
+                newScore.setSchool(school);
+                scoreRepository.save(newScore);
+
+            }
+        }
+
+    }
+
+    //ham return list criteria goc ( la cha, ong noi, ong co noi ,.. cua cac criteria khac )
+    public List<Criteria> getAllRoot(){
+        List<Criteria> allRoot = criteriaRepository.searchCriteriaByParentContains(0L);
         return allRoot;
     }
+    //ham de quy tinh diem cua 1 criteria va 1 result
     public int getScore(Criteria criteria, School school){
         if(criteria.getParent()==getMinLevel()){
             Score sc = scoreRepository.findByCriteriaAndSchool(school.getId(), criteria.getId());
@@ -52,5 +75,21 @@ public class CriteriaService {
             }
             return  score;
         }
+    }
+    //ham sep loai cho 1 school
+    public String getResult(School school){
+        String result = "chưa hoàn thành";
+        List<Criteria> rootCriteriaList= getAllRoot();
+        for(Criteria rootCriteria:rootCriteriaList){
+            if(getScore(rootCriteria, school)<50){
+                return result;
+            }
+            if(getScore(rootCriteria, school)<75){
+                return "hoàn thành";
+            }
+            else result="hoàn thành tốt";
+
+        }
+        return result;
     }
 }

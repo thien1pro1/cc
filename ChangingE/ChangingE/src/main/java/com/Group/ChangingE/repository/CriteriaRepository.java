@@ -13,4 +13,6 @@ public interface CriteriaRepository extends JpaRepository<Criteria, Long> {
 //    @Query("SELECT c FROM criteria c WHERE c.parent = ?1")
     List<Criteria> findCriteriaByParent(Long parent);
     List<Criteria> searchCriteriaByParentContains(Long id);
+    List<Criteria> searchCriteriaByLevelContains(int level);
+
 }
