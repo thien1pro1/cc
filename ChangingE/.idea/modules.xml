@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/ChangingE.iml" filepath="$PROJECT_DIR$/.idea/ChangingE.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ChangingE/ChangingE.iml" filepath="$PROJECT_DIR$/ChangingE/ChangingE.iml" />
     </modules>
   </component>
 </project>
