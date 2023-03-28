@@ -13,9 +13,18 @@ import java.util.List;
 public class CriteriaAPI {
     @Autowired
     CriteriaService service = new CriteriaService();
+    @GetMapping("/")
+    public List<Criteria> getToShowCriteria(@RequestBody List<Integer> list, @PathVariable School school){
+        return service.getAllDetail();
+    }
+
     @PostMapping("/")
-    public String rating(@RequestBody List<Integer> list, @PathVariable School school){
-        service.saveAllCriteria(list,school);
+    public String save(@RequestBody List<Integer> list, @PathVariable School school){
+        service.saveScoreList(list,school);
         return service.getResult(school);
+    }
+    @PutMapping("/{id}")
+    public String update(){
+        return ":)) update API";
     }
 }
