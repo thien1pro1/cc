@@ -31,12 +31,13 @@ public class CriteriaService {
         return level;
     }
     public List<Criteria> getAllDetail(){
-        List<Criteria> detailList= criteriaRepository.searchCriteriaByLevelContains(getMinLevel());
+        List<Criteria> detailList= criteriaRepository.findCriteriaByLevelGroupByParentOrderByParent(getMinLevel());
         return detailList;
     }
 
-    public void saveAllCriteria(List<Integer> scoreList, School school){
-        List<Criteria> detailList = criteriaRepository.searchCriteriaByLevelContains(getMinLevel());
+
+    public void saveScoreList(List<Integer> scoreList, School school){
+        List<Criteria> detailList = criteriaRepository.findCriteriaByLevelGroupByParentOrderByParent(getMinLevel());
         if(scoreList.size()==detailList.size()){
             for(int i = 0; i<= scoreList.size();i++){
                 Score newScore = new Score();
@@ -52,7 +53,7 @@ public class CriteriaService {
 
     //ham return list criteria goc ( la cha, ong noi, ong co noi ,.. cua cac criteria khac )
     public List<Criteria> getAllRoot(){
-        List<Criteria> allRoot = criteriaRepository.searchCriteriaByParentContains(0L);
+        List<Criteria> allRoot = criteriaRepository.findByLevel(0);
         return allRoot;
     }
     //ham de quy tinh diem cua 1 criteria va 1 result
@@ -62,7 +63,7 @@ public class CriteriaService {
             return sc.getScore();
         }
         else{
-            List<Criteria> criteriaList = criteriaRepository.findCriteriaByParent(criteria.getId());
+            List<Criteria> criteriaList = criteriaRepository.findByParent(criteria.getId());
             int score = 0;
             for(Criteria criteriaChild:criteriaList){
                 if(getScore(criteriaChild,school)+score<criteria.getMaxScore()){
